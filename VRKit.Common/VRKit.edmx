@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VRKitModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Lookups">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Key" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NumValue" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AlterDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transaction_Details">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TranId" Type="int" Nullable="false" />
+          <Property Name="Cost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Order" Type="int" Nullable="false" />
+          <Property Name="TimeStamp" Type="datetime" Nullable="false" />
+          <Property Name="Rate" Type="numeric" Precision="10" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transactions">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TimeStamp" Type="datetime" Nullable="false" />
+          <Property Name="Initial" Type="int" Nullable="false" />
+          <Property Name="TranCount" Type="int" Nullable="false" />
+          <Property Name="Step" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_TranDetails_Trans">
+          <End Role="Transactions" Type="Self.Transactions" Multiplicity="1" />
+          <End Role="Transaction_Details" Type="Self.Transaction_Details" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Transactions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction_Details">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Alter_Lookup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="key" Type="nvarchar" Mode="In" />
+          <Parameter Name="NumValue" Type="numeric" Mode="In" />
+        </Function>
+        <Function Name="Create_Transaction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Initial" Type="int" Mode="In" />
+          <Parameter Name="Trancount" Type="int" Mode="In" />
+          <Parameter Name="Step" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Create_Transaction_Details" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TranID" Type="int" Mode="In" />
+          <Parameter Name="Cost" Type="decimal" Mode="In" />
+          <Parameter Name="Order" Type="decimal" Mode="In" />
+        </Function>
+        <Function Name="Read_Lookup" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Key" Type="nvarchar" Mode="In" />
+          <Parameter Name="Type" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Read_Lookup_Defaults" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Read_Transaction_Groups" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Read_Transactions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="VRKitModelStoreContainer">
+          <EntitySet Name="Lookups" EntityType="Self.Lookups" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transaction_Details" EntityType="Self.Transaction_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transactions" EntityType="Self.Transactions" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TranDetails_Trans" Association="Self.FK_TranDetails_Trans">
+            <End Role="Transactions" EntitySet="Transactions" />
+            <End Role="Transaction_Details" EntitySet="Transaction_Details" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VRKitModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Lookup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Key" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NumValue" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AlterDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Transaction_Details">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TranId" Type="Int32" Nullable="false" />
+          <Property Name="Cost" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Order" Type="Int32" Nullable="false" />
+          <Property Name="TimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Rate" Type="Decimal" Precision="10" Scale="0" Nullable="false" />
+          <NavigationProperty Name="Transaction" Relationship="Self.FK_TranDetails_Trans" FromRole="Transaction_Details" ToRole="Transactions" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Initial" Type="Int32" Nullable="false" />
+          <Property Name="TranCount" Type="Int32" Nullable="false" />
+          <Property Name="Step" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Transaction_Details" Relationship="Self.FK_TranDetails_Trans" FromRole="Transactions" ToRole="Transaction_Details" />
+        </EntityType>
+        <Association Name="FK_TranDetails_Trans">
+          <End Role="Transactions" Type="Self.Transaction" Multiplicity="1" />
+          <End Role="Transaction_Details" Type="Self.Transaction_Details" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Transactions">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction_Details">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VRKitEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Lookups" EntityType="Self.Lookup" />
+          <EntitySet Name="Transaction_Details" EntityType="Self.Transaction_Details" />
+          <EntitySet Name="Transactions" EntityType="Self.Transaction" />
+          <AssociationSet Name="FK_TranDetails_Trans" Association="Self.FK_TranDetails_Trans">
+            <End Role="Transactions" EntitySet="Transactions" />
+            <End Role="Transaction_Details" EntitySet="Transaction_Details" />
+          </AssociationSet>
+          <FunctionImport Name="Alter_Lookup">
+            <Parameter Name="key" Mode="In" Type="String" />
+            <Parameter Name="NumValue" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="Create_Transaction" ReturnType="Collection(Decimal)">
+            <Parameter Name="Initial" Mode="In" Type="Int32" />
+            <Parameter Name="Trancount" Mode="In" Type="Int32" />
+            <Parameter Name="Step" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Create_Transaction_Details" ReturnType="Collection(Decimal)">
+            <Parameter Name="TranID" Mode="In" Type="Int32" />
+            <Parameter Name="Cost" Mode="In" Type="Decimal" />
+            <Parameter Name="Order" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="Read_Lookup" ReturnType="Collection(Decimal)">
+            <Parameter Name="Key" Mode="In" Type="String" />
+            <Parameter Name="Type" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Read_Lookup_Defaults" ReturnType="Collection(VRKitModel.Read_Lookup_Defaults_Result)" />
+          <FunctionImport Name="Read_Transaction_Groups" ReturnType="Collection(VRKitModel.Read_Transaction_Groups_Result)" />
+          <FunctionImport Name="Read_Transactions" ReturnType="Collection(VRKitModel.Read_Transactions_Result)" />
+        </EntityContainer>
+        <ComplexType Name="Read_Lookup_Defaults_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Key" Nullable="false" MaxLength="50" />
+          <Property Type="Decimal" Name="NumVAlue" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="String" Name="Type" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Read_Transaction_Groups_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="DateTime" Name="TimeStamp" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="Initial" Nullable="false" />
+          <Property Type="Int32" Name="TranCount" Nullable="false" />
+          <Property Type="Decimal" Name="Step" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Decimal" Name="Cost" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="Rate" Nullable="false" Precision="10" Scale="0" />
+          <Property Type="Int32" Name="Order" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="Read_Transactions_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="DateTime" Name="TimeStamp" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="Initial" Nullable="false" />
+          <Property Type="Int32" Name="TranCount" Nullable="false" />
+          <Property Type="Decimal" Name="Step" Nullable="false" Precision="10" Scale="2" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VRKitModelStoreContainer" CdmEntityContainer="VRKitEntities">
+          <EntitySetMapping Name="Lookups">
+            <EntityTypeMapping TypeName="VRKitModel.Lookup">
+              <MappingFragment StoreEntitySet="Lookups">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="NumValue" ColumnName="NumValue" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="AlterDate" ColumnName="AlterDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transaction_Details">
+            <EntityTypeMapping TypeName="VRKitModel.Transaction_Details">
+              <MappingFragment StoreEntitySet="Transaction_Details">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TranId" ColumnName="TranId" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Order" ColumnName="Order" />
+                <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="VRKitModel.Transaction">
+              <MappingFragment StoreEntitySet="Transactions">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+                <ScalarProperty Name="Initial" ColumnName="Initial" />
+                <ScalarProperty Name="TranCount" ColumnName="TranCount" />
+                <ScalarProperty Name="Step" ColumnName="Step" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Alter_Lookup" FunctionName="VRKitModel.Store.Alter_Lookup" />
+          <FunctionImportMapping FunctionImportName="Create_Transaction" FunctionName="VRKitModel.Store.Create_Transaction" />
+          <FunctionImportMapping FunctionImportName="Create_Transaction_Details" FunctionName="VRKitModel.Store.Create_Transaction_Details" />
+          <FunctionImportMapping FunctionImportName="Read_Lookup" FunctionName="VRKitModel.Store.Read_Lookup" />
+          <FunctionImportMapping FunctionImportName="Read_Lookup_Defaults" FunctionName="VRKitModel.Store.Read_Lookup_Defaults">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VRKitModel.Read_Lookup_Defaults_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="NumVAlue" ColumnName="NumVAlue" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Read_Transaction_Groups" FunctionName="VRKitModel.Store.Read_Transaction_Groups">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VRKitModel.Read_Transaction_Groups_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+                <ScalarProperty Name="Initial" ColumnName="Initial" />
+                <ScalarProperty Name="TranCount" ColumnName="TranCount" />
+                <ScalarProperty Name="Step" ColumnName="Step" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Order" ColumnName="Order" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Read_Transactions" FunctionName="VRKitModel.Store.Read_Transactions">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VRKitModel.Read_Transactions_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+                <ScalarProperty Name="Initial" ColumnName="Initial" />
+                <ScalarProperty Name="TranCount" ColumnName="TranCount" />
+                <ScalarProperty Name="Step" ColumnName="Step" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
